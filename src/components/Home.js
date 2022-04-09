@@ -52,8 +52,7 @@ export default function Home() {
 
     if (ipExists) {
       setCandidateSelect({
-        candidate:
-          "Já existe um voto registrado com esse IP! obrigado por votar!",
+        candidate: "Seu voto já foi registrado! Obrigado por votar.",
       });
       return "err";
     }
