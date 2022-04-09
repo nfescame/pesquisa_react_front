@@ -20,7 +20,6 @@ export default function Home() {
     api
       .get("/")
       .then(function (response) {
-        console.log(response);
         setCandidate(response.data.candidatos);
       })
       .catch(function (error) {
@@ -32,7 +31,6 @@ export default function Home() {
     api
       .get("/vote")
       .then(function (response) {
-        console.log(response);
         setVotes(response.data);
       })
       .catch(function (error) {
@@ -42,7 +40,6 @@ export default function Home() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(candidateSelect);
     let ipExists = false;
 
     votes.map((vote) => {
