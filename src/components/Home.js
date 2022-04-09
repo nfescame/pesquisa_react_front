@@ -26,24 +26,18 @@ export default function Home() {
       .catch(function (error) {
         console.log(error);
       });
-    // try {
-    //   const result = await api.get("/");
-
-    //   setCandidate(result.data.candidatos);
-    // } catch (err) {
-    //   console.log(err);
-    // }
   };
 
   const getVote = async () => {
-    try {
-      const result = await api.get("/vote");
-
-      console.log(result.data);
-      setVotes(result.data);
-    } catch (err) {
-      console.log(err);
-    }
+    api
+      .get("/vote")
+      .then(function (response) {
+        console.log(response);
+        setVotes(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   async function handleSubmit(e) {
