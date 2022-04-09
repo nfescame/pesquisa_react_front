@@ -40,33 +40,36 @@ export default function Home() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    let ipExists = false;
 
-    votes.map((vote) => {
-      if (vote.ip[0].IPv4 === ip.IPv4) {
-        ipExists = true;
-        return true;
+    if (candidateSelect.candidate) {
+      let ipExists = false;
+
+      votes.map((vote) => {
+        if (vote.ip[0].IPv4 === ip.IPv4) {
+          ipExists = true;
+          return true;
+        }
+        return 0;
+      });
+
+      if (ipExists) {
+        setCandidateSelect({
+          candidate: "Seu voto já foi registrado! Obrigado por votar.",
+        });
+        return "err";
       }
-      return 0;
-    });
 
-    if (ipExists && candidateSelect.candidate) {
-      setCandidateSelect({
-        candidate: "Seu voto já foi registrado! Obrigado por votar.",
-      });
-      return "err";
+      api
+        .post("/vote", candidateSelect)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+      window.location.reload(false);
     }
-
-    api
-      .post("/vote", candidateSelect)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-    window.location.reload(false);
   }
 
   const handleChange = (e) => {
