@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 import List from "./List";
-import api from "../api/api";
+import api from "../api/api.js";
 import axios from "axios";
 
 export default function Home() {
@@ -11,24 +11,39 @@ export default function Home() {
   const [candidateSelect, setCandidateSelect] = useState({});
 
   useEffect(() => {
-    const start = async () => {
-      try {
-        const response = await api.get("/");
-        const responseVote = await api.get("/vote");
-
-        setCandidate(response.data.candidatos);
-        setVotes(responseVote.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    start();
+    getCandidate();
+    getVote();
     getData();
   }, []);
 
+  const getCandidate = () => {
+    (async () => {
+      try {
+        const result = await api.get("/");
+
+        setCandidate(result.data.candidatos);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  };
+
+  const getVote = () => {
+    (async () => {
+      try {
+        const result = await api.get("/vote");
+
+        console.log(result.data);
+        setVotes(result.data);
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
+    console.log(candidateSelect);
     let ipExists = false;
 
     votes.map((vote) => {
@@ -48,12 +63,15 @@ export default function Home() {
     }
 
     api
-      .post(`/vote`, candidateSelect)
-      .then(() => {})
-      .catch((err) => {
-        console.error(err);
+      .post("/vote", candidateSelect)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
       });
-    window.location.reload(false);
+
+    // window.location.reload(false);
   }
 
   const handleChange = (e) => {
@@ -67,11 +85,11 @@ export default function Home() {
 
   return (
     <div className='container'>
-      <div className='d-flex justify-content-center pt-5 '>
+      <div className='d-flex justify-content-center p-3 '>
         <h1 className='fw-bolder'>Eleições 2022</h1>
       </div>
       <List candidates={candidates} votes={votes} handleChange={handleChange} />
-      <form className='py-5' onSubmit={(e) => handleSubmit(e)}>
+      <form onSubmit={(e) => handleSubmit(e)}>
         <div className='d-flex justify-content-between m-4'>
           <p>Total de votos: {votes.length}</p>
           <button
