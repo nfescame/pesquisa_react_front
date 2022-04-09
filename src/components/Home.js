@@ -16,29 +16,34 @@ export default function Home() {
     getData();
   }, []);
 
-  const getCandidate = () => {
-    (async () => {
-      try {
-        const result = await api.get("/");
+  const getCandidate = async () => {
+    api
+      .get("/")
+      .then(function (response) {
+        console.log(response);
+        setCandidate(response.data.candidatos);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    // try {
+    //   const result = await api.get("/");
 
-        setCandidate(result.data.candidatos);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    //   setCandidate(result.data.candidatos);
+    // } catch (err) {
+    //   console.log(err);
+    // }
   };
 
-  const getVote = () => {
-    (async () => {
-      try {
-        const result = await api.get("/vote");
+  const getVote = async () => {
+    try {
+      const result = await api.get("/vote");
 
-        console.log(result.data);
-        setVotes(result.data);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+      console.log(result.data);
+      setVotes(result.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   async function handleSubmit(e) {
@@ -71,7 +76,7 @@ export default function Home() {
         console.log(error);
       });
 
-    // window.location.reload(false);
+    window.location.reload(false);
   }
 
   const handleChange = (e) => {
