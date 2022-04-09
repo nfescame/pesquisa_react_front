@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
+import ModalConfirmation from "./ModalConfirmation.js";
 import List from "./List";
 import api from "../api/api.js";
 import axios from "axios";
@@ -9,6 +10,7 @@ export default function Home() {
   const [votes, setVotes] = useState([]);
   const [ip, setIpv4] = useState("");
   const [candidateSelect, setCandidateSelect] = useState({});
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     getCandidate();
@@ -68,7 +70,8 @@ export default function Home() {
           console.log(error);
         });
 
-      window.location.reload(false);
+      setOpenModal(true);
+      // window.location.reload(false);
     }
   }
 
@@ -100,6 +103,11 @@ export default function Home() {
           </button>
         </div>
         <Modal candidateSelect={candidateSelect} />
+        {openModal ? (
+          <ModalConfirmation candidateSelect={candidateSelect} />
+        ) : (
+          ""
+        )}
       </form>
     </div>
   );
