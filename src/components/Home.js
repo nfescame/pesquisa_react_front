@@ -50,7 +50,7 @@ export default function Home() {
       return 0;
     });
 
-    if (ipExists && candidateSelect) {
+    if (ipExists && candidateSelect.candidate) {
       setCandidateSelect({
         candidate: "Seu voto já foi registrado! Obrigado por votar.",
       });
