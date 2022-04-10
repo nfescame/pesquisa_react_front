@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
 import List from "./List";
+import Loading from "./Loading";
 import api from "../api/api.js";
 import axios from "axios";
 
@@ -9,6 +10,7 @@ export default function Home() {
   const [votes, setVotes] = useState([]);
   const [ip, setIpv4] = useState("");
   const [candidateSelect, setCandidateSelect] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getCandidate();
@@ -17,10 +19,12 @@ export default function Home() {
   }, []);
 
   const getCandidate = async () => {
+    setLoading(true);
     api
       .get("/")
       .then(function (response) {
         setCandidate(response.data.candidatos);
+        setLoading(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -86,6 +90,8 @@ export default function Home() {
       <div className='d-flex justify-content-center p-3 '>
         <h1 className='fw-bolder'>Eleições 2022</h1>
       </div>
+      {loading ? <Loading /> : ""}
+
       <List candidates={candidates} votes={votes} handleChange={handleChange} />
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className='d-flex justify-content-between m-4'>
